@@ -1,15 +1,17 @@
+//@ts-ignore
 import Client from '../database';
 
 export type Product = {
-    id: Number;
+    id?: Number;
     name: string;
     price: number;
     category: string;
 }
 
-export class StoreProduct {
+export class ProductStore {
     async getAllProducts(): Promise<Product[]> {
         try {
+            //@ts-ignore
             const conn = await Client.connect();
             const sql = 'SELECT * FROM products';
             const result = await conn.query(sql);        
@@ -22,6 +24,7 @@ export class StoreProduct {
     }
     async getProductById(id: string): Promise<Product> {
         try {
+            //@ts-ignore
             const conn = await Client.connect();
             const sql = 'SELECT * FROM products WHERE id=($1)';
             const result = await conn.query(sql, [id]);        
@@ -35,6 +38,7 @@ export class StoreProduct {
 
     async saveProduct(product: Product): Promise<Product> {
         try {
+            //@ts-ignore
             const conn = await Client.connect();
             const sql = 'INSERT INTO products (name, price, category) VALUES($1, $2, $3, $4)';
             const result = await conn.query(sql, [product.name, product.price ,product.category]);        
@@ -43,6 +47,33 @@ export class StoreProduct {
             return product;
         } catch(err) {
             throw new Error(`Could not add new product ${product.name}. Error: ${err}`);
+        }
+    }
+
+    async deleteProduct(id: string): Promise<Product> {
+        try {
+            //@ts-ignore
+            const conn = await Client.connect();
+            const sql = 'DELETE FROM products WHERE id=($1)';
+            const result = await conn.query(sql, [id]);
+
+            return result.rows[0];
+        } catch(err) {
+            throw new Error(`Could not delete product with id ${id}`);
+        }
+    }
+
+    async getProductsByCategory(category: string): Promise<Product[]> {
+        try {
+            //@ts-ignore
+            const conn = await Client.connect();
+            const sql = 'SELECT * FROM products WHERE category=($1) ORDER BY name DESC';
+            const result = await conn.query(sql, [category]);
+            conn.release();
+
+            return result.rows;
+        } catch (err) {
+            throw new Error(`Could not get products by category ${category}`);
         }
     }
 }
