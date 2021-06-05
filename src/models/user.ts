@@ -3,7 +3,7 @@ import Client from '../database';
 import bcrypt from 'bcrypt';
 
 export type User = {
-    id: Number;
+    id?: Number;
     userName: string;
     firstName: string;
     lastName: string;
@@ -13,7 +13,7 @@ export type User = {
 const saltRounds:string | undefined = process.env.SALT_ROUNDS;
 const pepper: string | undefined = process.env.BCRYPT_PASSWORD;
 
-export class StoreUser {
+export class UserStore {
     async getAllUsers(): Promise<User[]> {
         try {
             //@ts-ignore
@@ -53,6 +53,20 @@ export class StoreUser {
             return user;
         } catch(err) {
             throw new Error(`Could not add new user ${user.userName}. Error: ${err}`);
+        }
+    }
+
+    async deleteUser(id: string): Promise<User> {
+        try {
+            //@ts-ignore
+            const conn = await Client.connect();
+            const sql = 'DELETE FROM users WHERE id=($1)';
+            const result = await conn.query(sql, [id]);
+            conn.release();
+
+            return result.rows[0];  
+        } catch (err) {
+            throw new Error(`Could not delete user with id ${id}. Error: ${err}`);
         }
     }
 
