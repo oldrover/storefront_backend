@@ -6,7 +6,7 @@ export type Order = {
     id?: number;
     products: Product[];
     user_id: number;
-    completed: boolean;
+    completed: string;
 }
 
 export class OrderStore {
