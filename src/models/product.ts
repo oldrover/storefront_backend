@@ -2,9 +2,9 @@
 import Client from '../database';
 
 export type Product = {
-    id?: Number;
+    id?: number;
     name: string;
-    price: number;
+    price: string;
     category: string;
 }
 
@@ -40,7 +40,7 @@ export class ProductStore {
         try {
             //@ts-ignore
             const conn = await Client.connect();
-            const sql = 'INSERT INTO products (name, price, category) VALUES($1, $2, $3, $4)';
+            const sql = 'INSERT INTO products (name, price, category) VALUES($1, $2, $3)';
             const result = await conn.query(sql, [product.name, product.price ,product.category]);        
             conn.release();
 
@@ -67,7 +67,7 @@ export class ProductStore {
         try {
             //@ts-ignore
             const conn = await Client.connect();
-            const sql = 'SELECT * FROM products WHERE category=($1) ORDER BY name DESC';
+            const sql = 'SELECT * FROM products WHERE category=($1) ORDER BY name ASC';
             const result = await conn.query(sql, [category]);
             conn.release();
 
