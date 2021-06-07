@@ -9,7 +9,7 @@ const getAllProducts = async (_req: Request, res: Response) => {
 }
 
 const getProductById = async (req: Request, res: Response) => {
-    const product = await store.getProductById(req.body.id);
+    const product = await store.getProductById(req.params.id);
     res.json(product);
 }
 
@@ -21,6 +21,8 @@ const saveProduct = async (req: Request, res: Response) => {
             category: req.body.category
         }
 
+        console.log(product);
+
         const newProduct = await store.saveProduct(product);
         res.json(newProduct);
 
@@ -31,12 +33,12 @@ const saveProduct = async (req: Request, res: Response) => {
 }
 
 const deleteProduct = async (req: Request, res: Response) => {
-    const product = await store.deleteProduct(req.body.id);
+    const product = await store.deleteProduct(req.params.id);
     res.json(product);
 }
 
 const getProductsByCategory = async (req: Request, res: Response) => {
-    const products = await store.getProductsByCategory(req.body.category);
+    const products = await store.getProductsByCategory(req.params.category);
     res.json(products);
 }
 
@@ -45,7 +47,7 @@ const product_routes = (app: express.Application) => {
     app.get('/products/:id', getProductById);
     app.post('/products', saveProduct);
     app.delete('/products/:id', deleteProduct);
-    app.get('/products/:category', getProductsByCategory);
+    app.get('/products/categories/:category', getProductsByCategory);
 }
 
 export default product_routes;
