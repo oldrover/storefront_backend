@@ -9,7 +9,7 @@ const getAllUsers = async (_req: Request, res: Response) => {
 }
 
 const getUserById = async (req: Request, res: Response) => {
-    const user = await store.getUserById(req.body.id);
+    const user = await store.getUserById(req.params.id);    
     res.json(user);
 }
 
@@ -32,7 +32,7 @@ const createUser = async (req: Request, res: Response) => {
 }
 
 const deleteUser = async (req: Request, res: Response) => {
-    const user = await store.deleteUser(req.body.id);
+    const user = await store.deleteUser(req.params.id);
     res.json(user);
 }
 
@@ -40,7 +40,7 @@ const user_routes = (app: express.Application) => {
     app.get('/users', getAllUsers);
     app.get('/users/:id', getUserById); 
     app.post('/users', createUser); 
-    app.delete('users/:id', deleteUser);  
+    app.delete('/users/:id', deleteUser);  
 }
 
 
