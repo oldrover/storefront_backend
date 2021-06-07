@@ -9,8 +9,8 @@ These are the notes from a meeting with the frontend developer that describe wha
 - Show                                         : 'products/:id' [GET]
 - Create [token required]                      : 'products' [POST]
 - Delete [token required]                      : 'products' [DELETE]
-- Top 5 most popular products                  : 'products/:top' [GET]     
-- Products by category (args: product category): 'products/:category' [GET]
+- Top 5 most popular products                  : 'products/top5' [GET]     
+- Products by category (args: product category): 'products/categories/:category' [GET]
 
 #### Users
 - Index [token required]                       : 'users/' [GET] 
