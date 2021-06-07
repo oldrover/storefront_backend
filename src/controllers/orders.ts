@@ -14,8 +14,8 @@ const getCompletedOrdersByUser = async (req: Request, res: Response) => {
 }
 
 const order_routes = (app: express.Application) => {
-    app.get('/orders/current/:id', getCurrentOrderByUser);
-    app.get('orders/completed/:id', getCompletedOrdersByUser);
+    app.get('/orders/active/:id', getCurrentOrderByUser);
+    app.get('orders/complete/:id', getCompletedOrdersByUser);
 }
 
 export default order_routes;
