@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { Product,ProductStore } from '../models/product';
+import { Product, ProductStore } from '../models/product';
 
 const store = new ProductStore();
 
@@ -15,14 +15,11 @@ const getProductById = async (req: Request, res: Response) => {
 
 const saveProduct = async (req: Request, res: Response) => {
     try {
-        const product = {
+        const product: Product = {
             name: req.body.name,
             price: req.body.price,
             category: req.body.category
         }
-
-        console.log(product);
-
         const newProduct = await store.saveProduct(product);
         res.json(newProduct);
 
