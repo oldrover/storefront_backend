@@ -40,18 +40,20 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 #### Orders
 - id
-- id of each product in the order
-- quantity of each product in the order
-- user_id
-- status of order (active or complete)
+- list of ProductAndQuantity {
+    - Product
+    - quantity
+}
+- userId
+- status: active or complete
 
 ## Database Dictionary
 
 ### Table users
     id          SERIAL PRIMARY KEY
-    user_name   VARCHAR
-    first_name  VARCHAR
-    last_name   VARCHAR
+    userName   VARCHAR
+    firstName  VARCHAR
+    lastName   VARCHAR
     password    VARCHAR 
 
 ### Table products
@@ -62,11 +64,11 @@ These are the notes from a meeting with the frontend developer that describe wha
 ### Table orders
     id          SERIAL PRIMARY KEY
     status      VARCHAR
-    user_id     BIGINT foreign key to users table
+    userId     BIGINT foreign key to users table
 
 ### Table order_products
     id          SERIAL PRIMARY KEY
     quantity    INTEGER
-    order_id    BIGINT foreign key to orders table
-    product_id  BIGINT foreign key to products table
+    orderId    BIGINT foreign key to orders table
+    productId  BIGINT foreign key to products table
 
