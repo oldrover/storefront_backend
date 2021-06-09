@@ -34,7 +34,7 @@ export class OrderStore {
         try {            
             //@ts-ignore
             const conn = await Client.connect();
-            const sql = "SELECT * FROM orders WHERE user_id=($1) AND status='active'";
+            const sql = "SELECT * FROM orders WHERE userId=($1) AND status='active'";
             const result = await conn.query(sql,[id]);            
             const orderId = result.rows[0].id;
             conn.release();
@@ -53,7 +53,7 @@ export class OrderStore {
         try {
             //@ts-ignore
             const conn = await Client.connect();
-            const sql = "SELECT * FROM orders WHERE user_id=($1) AND status='complete'";
+            const sql = "SELECT * FROM orders WHERE userId=($1) AND status='complete'";
             const result = await conn.query(sql, [id]);
             conn.release();
 
@@ -67,7 +67,7 @@ export class OrderStore {
         try {
             //@ts-ignore
             const conn = await Client.connect();
-            const sql = 'INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3)';
+            const sql = 'INSERT INTO order_products (quantity, orderId, productId) VALUES($1, $2, $3)';
             const result = conn.query(sql, [quantity, orderId, productId]);            
             conn.release();
 
@@ -79,28 +79,24 @@ export class OrderStore {
         }
     }
 
-    async getProductsForOrder(orderId: number): Promise<ProductAndQuantity[]> {
+    private async getProductsForOrder(orderId: number): Promise<ProductAndQuantity[]> {
         try {
             //@ts-ignore
             const conn = await Client.connect(); 
-            const sql = 'SELECT * FROM products p JOIN order_products op ON p.id = op.product_id  WHERE op.order_id=($1)';
+            const sql = 'SELECT * FROM products p JOIN order_products op ON p.id = op.productId  WHERE op.orderId=($1)';
             const result = await conn.query(sql, [orderId]);
             conn.release();
-            
-            
-            let orderProducts: ProductAndQuantity[] = []; 
+       
+            const orderProducts = result.rows.map((row: { product_id: number; name: string; price: string; category: string; quantity: number }) => {
+                return{ product: {
+                    id: row.product_id,
+                    name: row.name,
+                    price: row.price,
+                    category: row.category
+                }, quantity: row.quantity }; 
+            }); 
 
-            result.rows.forEach((element: { product_id: number; name: string; price: string; category: string; quantity: number }) => {
-                orderProducts.push({ product: {
-                    id: element.product_id,
-                    name: element.name,
-                    price: element.price,
-                    category: element.category
-                }, quantity: element.quantity });                
-                
-            });             
-            return orderProducts; 
-                     
+            return orderProducts;
         } catch (err) {
             throw new Error(`Could not get products for order ${orderId}`);
 

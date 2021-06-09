@@ -35,7 +35,11 @@ export class UserStore {
             const result = await conn.query(sql, [id]);        
             conn.release();
 
-            return result.rows[0];
+            let user = result.rows[0];
+            delete user.password;
+            return user;
+                       
+            
         } catch(err) {
             throw new Error(`Could not find user with id:${id}. Error: ${err}`);
         }   
@@ -45,12 +49,12 @@ export class UserStore {
         try {
             //@ts-ignore
             const conn = await Client.connect();
-            const sql = 'INSERT INTO users (user_name, first_name, last_name, password) VALUES($1, $2, $3, $4) RETURNING *';
+            const sql = 'INSERT INTO users (userName, firstName, lastName, password) VALUES($1, $2, $3, $4) RETURNING *';
             const hash = bcrypt.hashSync(user.password + pepper, parseInt(saltRounds || '10'));
             const result = await conn.query(sql, [user.userName, user.firstName, user.lastName ,hash]);        
             conn.release();
 
-            return result.rows[0];
+            return user;
         } catch(err) {
             throw new Error(`Could not add new user ${user.userName}. Error: ${err}`);
         }
