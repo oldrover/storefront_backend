@@ -3,7 +3,7 @@ import { Product, ProductStore } from '../models/product';
 
 const store = new ProductStore();
 
-const getAllProducts = async (_req: Request, res: Response) => {
+const getAllProducts = async (req: Request, res: Response) => {
     const products = await store.getAllProducts();
     res.json(products);
 }
