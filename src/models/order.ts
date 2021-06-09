@@ -34,7 +34,7 @@ export class OrderStore {
         try {            
             //@ts-ignore
             const conn = await Client.connect();
-            const sql = "SELECT * FROM orders WHERE userId=($1) AND status='active'";
+            const sql = `SELECT * FROM orders WHERE "userId"=($1) AND status='active'`;
             const result = await conn.query(sql,[id]);            
             const orderId = result.rows[0].id;
             conn.release();
