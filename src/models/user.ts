@@ -21,13 +21,13 @@ export class UserStore {
             const sql = 'SELECT * FROM users';
             const result = await conn.query(sql);        
             conn.release();
-
+            
             return result.rows;
         } catch(err) {
             throw new Error(`Unable to get users: ${err}`);
         }        
     }
-    async getUserById(id: string): Promise<User> {
+    async getUserById(id: string): Promise<User>{
         try {
             //@ts-ignore
             const conn = await Client.connect();
@@ -35,11 +35,7 @@ export class UserStore {
             const result = await conn.query(sql, [id]);        
             conn.release();
 
-            let user = result.rows[0];
-            delete user.password;
-            return user;
-                       
-            
+            return result.rows[0]; 
         } catch(err) {
             throw new Error(`Could not find user with id:${id}. Error: ${err}`);
         }   
@@ -54,9 +50,10 @@ export class UserStore {
             const result = await conn.query(sql, [user.userName, user.firstName, user.lastName ,hash]);        
             conn.release();
 
-            return user;
+            return result.rows[0];
         } catch(err) {
             throw new Error(`Could not add new user ${user.userName}. Error: ${err}`);
+            
         }
     }
 

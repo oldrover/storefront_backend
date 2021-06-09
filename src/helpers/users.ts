@@ -4,13 +4,22 @@ import { User, UserStore } from '../models/user';
 const store = new UserStore();
 
 const getAllUsers = async (_req: Request, res: Response) => {
-    const users = await store.getAllUsers();
-    res.json(users);
+    try {
+        const users = await store.getAllUsers();
+        return res.json(users);
+    } catch (err) {
+        return res.status(400).json(err.toString());
+    }
+    
 }
 
 const getUserById = async (req: Request, res: Response) => {
-    const user = await store.getUserById(req.params.id);    
-    res.json(user);
+    try {
+        const user = await store.getUserById(req.params.id);
+        return res.json(user);  
+    } catch(err) {
+        return res.status(400).json(err.toString());
+    }
 }
 
 const createUser = async (req: Request, res: Response) => {
@@ -23,17 +32,22 @@ const createUser = async (req: Request, res: Response) => {
         }
     
         const newUser = await store.createUser(user);
-        res.json(newUser);
+        return res.json(newUser);
 
     } catch (err) {
-        res.status(400);
-        res.json(err);
+        return res.status(400).json(err.toString());
     }     
 }
 
 const deleteUser = async (req: Request, res: Response) => {
-    const user = await store.deleteUser(req.params.id);
-    res.json(user);
+    try {
+        const user = await store.deleteUser(req.params.id);
+        return res.json(user);
+    } catch(err) {
+        return res.status(400).json(err.toString())
+    }
+
+    
 }
 
 const user_routes = (app: express.Application) => {
