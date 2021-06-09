@@ -1,8 +1,8 @@
 import express, { Request, Response} from 'express';
 import cors from 'cors';
-import user_routes from './helpers/users';
-import product_routes from './helpers/products';
-import order_routes from './helpers/orders';
+import user_routes from './controllers/users';
+import product_routes from './controllers/products';
+import order_routes from './controllers/orders';
 
 const app = express();
 const address: string = "0.0.0.0:3000";

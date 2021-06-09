@@ -1,4 +1,4 @@
-import { User, UserStore } from '../user';
+import { User, ReturnUser, UserStore } from '../../models/user';
 
 const store = new UserStore();
 
@@ -9,7 +9,7 @@ const savedUser: User = {
     password: 'password123'
 }
 
-const expectedUser = {
+const expectedUser: ReturnUser = {
     id: 1,
     userName: 'tester',
     firstName: 'John',

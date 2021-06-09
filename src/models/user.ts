@@ -10,7 +10,7 @@ export type User = {
     password: string;
 }
 
-type ReturnUser = Omit<User, 'password'>;
+export type ReturnUser = Omit<User, 'password'>;
 
 const saltRounds:string | undefined = process.env.SALT_ROUNDS;
 const pepper: string | undefined = process.env.BCRYPT_PASSWORD;
