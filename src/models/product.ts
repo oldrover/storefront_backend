@@ -40,11 +40,11 @@ export class ProductStore {
         try {
             //@ts-ignore
             const conn = await Client.connect();
-            const sql = 'INSERT INTO products (name, price, category) VALUES($1, $2, $3)';
+            const sql = 'INSERT INTO products (name, price, category) VALUES($1, $2, $3) RETURNING *';
             const result = await conn.query(sql, [product.name, product.price ,product.category]);        
             conn.release();
 
-            return product;
+            return result.rows[0];
         } catch(err) {
             throw new Error(`Could not add new product ${product.name}. Error: ${err}`);
         }
