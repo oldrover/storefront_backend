@@ -1,7 +1,10 @@
 import express, { Request, Response } from 'express';
+import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import verifyAuthToken from '../security/JWTAuthentication';
 import { User, UserStore } from '../models/user';
+
+dotenv.config();
 
 //@ts-ignore
 const TOKEN_SECRET: string  = process.env.TOKEN_SECRET;
@@ -36,7 +39,7 @@ const createUser = async (req: Request, res: Response) => {
         }
     
         const newUser = await store.createUser(user);
-        const token = jwt.sign({user: newUser}, "test");
+        const token = jwt.sign({user: newUser}, TOKEN_SECRET);
         res.json(token);
 
     } catch (err) {
