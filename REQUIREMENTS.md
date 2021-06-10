@@ -8,14 +8,13 @@ These are the notes from a meeting with the frontend developer that describe wha
 - Index                                        : 'products' [GET] 
 - Show                                         : 'products/:id' [GET]
 - Create [token required]                      : 'products' [POST]
-- Delete [token required]                      : 'products' [DELETE]
-- Top 5 most popular products                  : 'products/top5' [GET]     
+- Delete [token required]                      : 'products' [DELETE]    
 - Products by category (args: product category): 'products/categories/:category' [GET]
 
 #### Users
 - Index [token required]                       : 'users/' [GET] 
 - Show [token required]                        : 'users/:id'[GET]
-- Create [token required]                      : 'users' [POST]
+- Create                                       : 'users' [POST]
 - Delete [token required]                      : 'users/:id' [DELETE]
 
 #### Orders
@@ -40,10 +39,7 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 #### Orders
 - id
-- list of ProductAndQuantity {
-    - Product
-    - quantity
-}
+- list of products in the order with its quantity  
 - userId
 - status: active or complete
 
@@ -51,9 +47,9 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ### Table users
     id          SERIAL PRIMARY KEY
-    userName   VARCHAR
-    firstName  VARCHAR
-    lastName   VARCHAR
+    userName    VARCHAR
+    firstName   VARCHAR
+    lastName    VARCHAR
     password    VARCHAR 
 
 ### Table products
@@ -64,11 +60,11 @@ These are the notes from a meeting with the frontend developer that describe wha
 ### Table orders
     id          SERIAL PRIMARY KEY
     status      VARCHAR
-    userId     BIGINT foreign key to users table
+    userId      BIGINT foreign key to users table(id)
 
 ### Table order_products
     id          SERIAL PRIMARY KEY
     quantity    INTEGER
-    orderId    BIGINT foreign key to orders table
-    productId  BIGINT foreign key to products table
+    orderId     BIGINT foreign key to orders table(id)
+    productId   BIGINT foreign key to products table(id)
 
