@@ -1,24 +1,28 @@
 import express, { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import verifyAuthToken from '../security/JWTAuthentication';
 import { User, UserStore } from '../models/user';
+
+//@ts-ignore
+const TOKEN_SECRET: string  = process.env.TOKEN_SECRET;
 
 const store = new UserStore();
 
 const getAllUsers = async (_req: Request, res: Response) => {
     try {
         const users = await store.getAllUsers();
-        return res.json(users);
+        res.json(users);
     } catch (err) {
-        return res.status(400).json(err.toString());
-    }
-    
+        res.status(400).json(err.toString());
+    }    
 }
 
 const getUserById = async (req: Request, res: Response) => {
     try {
-        const user = await store.getUserById(req.params.id);
-        return res.json(user);  
+        const user = await store.getUserById(req.params.id);        
+        res.json(user);  
     } catch(err) {
-        return res.status(400).json(err.toString());
+        res.status(400).json(err.toString());
     }
 }
 
@@ -32,29 +36,30 @@ const createUser = async (req: Request, res: Response) => {
         }
     
         const newUser = await store.createUser(user);
-        return res.json(newUser);
+        const token = jwt.sign({user: newUser}, "test");
+        res.json(token);
 
     } catch (err) {
-        return res.status(400).json(err.toString());
+        res.status(400).json(err.toString());
     }     
 }
 
 const deleteUser = async (req: Request, res: Response) => {
     try {
         const user = await store.deleteUser(req.params.id);
-        return res.json(user);
+        res.json(user);
     } catch(err) {
-        return res.status(400).json(err.toString())
+        res.status(400).json(err.toString())
     }
 
     
 }
 
 const user_routes = (app: express.Application) => {
-    app.get('/users', getAllUsers);
-    app.get('/users/:id', getUserById); 
+    app.get('/users', verifyAuthToken, getAllUsers);
+    app.get('/users/:id', verifyAuthToken, getUserById); 
     app.post('/users', createUser); 
-    app.delete('/users/:id', deleteUser);  
+    app.delete('/users/:id', verifyAuthToken, deleteUser);  
 }
 
 

@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import verifyAuthToken from '../security/JWTAuthentication';
 import { Order, OrderStore } from '../models/order';
 
 const store = new OrderStore();
@@ -28,7 +29,7 @@ const getCompletedOrdersByUser = async (req: Request, res: Response) => {
     res.json(orders);
 }
 
-const addProduct = async (req: Request, res: Response) => {
+const addProduct = async (req: Request, res: Response) => {    
     try {
         const addedProduct = await store.addProductToOrder(
             parseInt(req.body.quantity),
@@ -43,10 +44,10 @@ const addProduct = async (req: Request, res: Response) => {
 }
 
 const order_routes = (app: express.Application) => {
-    app.post('/orders', createOrder);
-    app.get('/orders/active/:id', getCurrentOrderByUser);
-    app.get('/orders/complete/:id', getCompletedOrdersByUser);
-    app.post('/orders/:orderId/products', addProduct);
+    app.post('/orders', verifyAuthToken, createOrder);
+    app.get('/orders/active/:id', verifyAuthToken, getCurrentOrderByUser);
+    app.get('/orders/complete/:id', verifyAuthToken, getCompletedOrdersByUser);
+    app.post('/orders/:orderId/products', verifyAuthToken ,addProduct);
 }
 
 export default order_routes;
