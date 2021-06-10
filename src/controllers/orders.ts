@@ -14,14 +14,17 @@ const createOrder = async (req: Request, res: Response) => {
         res.json(newOrder);
 
     } catch(err) {
-        res.status(400);
-        res.json(err);
+        res.status(400).json(err.message);
     }    
 }
 
 const getCurrentOrderByUser = async (req: Request, res: Response) => {
-    const order = await store.getCurrentOrderByUser(req.params.id);    
-    res.json(order);
+    try {
+        const order = await store.getCurrentOrderByUser(req.params.id);    
+        res.json(order);
+    } catch(err) {
+        res.status(400).json(err.message);
+    }     
 }
 
 const getCompletedOrdersByUser = async (req: Request, res: Response) => {
@@ -38,8 +41,7 @@ const addProduct = async (req: Request, res: Response) => {
         res.json(addedProduct);
 
     } catch(err) {
-        res.status(400);
-        res.json(err);
+        res.status(400).json(err.message);
     }
 }
 

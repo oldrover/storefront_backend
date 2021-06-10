@@ -25,8 +25,7 @@ const saveProduct = async (req: Request, res: Response) => {
         res.json(newProduct);
 
     } catch (err) {
-        res.status(400);
-        res.json(err);
+        res.status(400).json(err.message);
     }
 }
 

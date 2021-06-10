@@ -16,7 +16,7 @@ const getAllUsers = async (_req: Request, res: Response) => {
         const users = await store.getAllUsers();
         res.json(users);
     } catch (err) {
-        res.status(400).json(err.toString());
+        res.status(400).json(err.message);
     }    
 }
 
@@ -25,7 +25,7 @@ const getUserById = async (req: Request, res: Response) => {
         const user = await store.getUserById(req.params.id);        
         res.json(user);  
     } catch(err) {
-        res.status(400).json(err.toString());
+        res.status(400).json(err.message);
     }
 }
 
@@ -43,7 +43,7 @@ const createUser = async (req: Request, res: Response) => {
         res.json(token);
 
     } catch (err) {
-        res.status(400).json(err.toString());
+        res.status(400).json(err.message);
     }     
 }
 
@@ -52,7 +52,7 @@ const deleteUser = async (req: Request, res: Response) => {
         const user = await store.deleteUser(req.params.id);
         res.json(user);
     } catch(err) {
-        res.status(400).json(err.toString())
+        res.status(400).json(err.message)
     }
 
     
