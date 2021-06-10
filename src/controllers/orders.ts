@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import verifyAuthToken from '../security/JWTAuthentication';
-import { Order, OrderStore } from '../models/order';
+import { CreateOrder, Order, OrderStore } from '../models/order';
 
 const store = new OrderStore();
 
@@ -34,10 +34,13 @@ const getCompletedOrdersByUser = async (req: Request, res: Response) => {
 
 const addProduct = async (req: Request, res: Response) => {    
     try {
-        const addedProduct = await store.addProductToOrder(
-            parseInt(req.body.quantity),
-            req.params.orderId,
-            req.body.productId);
+        const createOrder: CreateOrder = {
+            quantity: req.body.quantity,
+            orderId: req.params.orderId,
+            productId: req.body.productId
+        }
+
+        const addedProduct = await store.addProductToOrder(createOrder);           
         res.json(addedProduct);
 
     } catch(err) {

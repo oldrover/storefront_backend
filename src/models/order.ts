@@ -14,13 +14,20 @@ export type Order = {
     status: string;
 }
 
+export type CreateOrder = {
+    id?: number,
+    quantity: string,
+    orderId: string,
+    productId: string
+}
+
 export class OrderStore {
 
     async createOrder(order: Order): Promise<Order> {
         try {
             //@ts-ignore
             const conn = await Client.connect();            
-            const sql = 'INSERT INTO orders (status, user_id) VALUES($1, $2)';
+            const sql = 'INSERT INTO orders (status, "userId") VALUES($1, $2)';
             const result = await conn.query(sql, [order.status, order.userId]);
             conn.release();
 
@@ -49,47 +56,58 @@ export class OrderStore {
         }
     } 
 
-    async getCompletedOrdersByUser(id: string): Promise<Order> {
+    async getCompletedOrdersByUser(id: string): Promise<Order[]> {
         try {
             //@ts-ignore
             const conn = await Client.connect();
-            const sql = "SELECT * FROM orders WHERE userId=($1) AND status='complete'";
+            const sql = `SELECT * FROM orders WHERE "userId"=($1) AND status='complete'`;
             const result = await conn.query(sql, [id]);
             conn.release();
 
-            return result.rows;
+            const getOrders = async(): Promise<Order[]> => {
+                return Promise.all(result.rows.map( async (row: Order) => {                
+                    const orderId = row.id || "";                
+                    row.products = await this.getProductsForOrder(orderId);                   
+                return (row);                
+                }));
+            };            
+            const orders = getOrders().then(data => {
+                return data;                
+            });
+            
+            return orders;
         } catch (err) {
             throw new Error(`Could not get completed orders for user with id ${id}`);
         }
     }
 
-    async addProductToOrder(quantity: number, orderId: string, productId: string): Promise<Order> {
+    async addProductToOrder(createOrder: CreateOrder): Promise<CreateOrder> {
         try {
+            console.log(createOrder)
             //@ts-ignore
-            const conn = await Client.connect();
-            const sql = 'INSERT INTO order_products (quantity, orderId, productId) VALUES($1, $2, $3)';
-            const result = conn.query(sql, [quantity, orderId, productId]);            
+            const conn = await Client.connect(); 
+            const sql = 'INSERT INTO order_products (quantity, "orderId", "productId") VALUES($1, $2, $3) RETURNING *';
+            const result = await conn.query(sql, [createOrder.quantity, createOrder.orderId, createOrder.productId]);            
             conn.release();
 
-            const order = result.rows[0];
+            return result.rows[0];
 
-            return order;
         } catch (err) {
-            throw new Error(`Could not add product with id ${productId} to order ${orderId}. Error: ${err}`);
+            throw new Error(`Could not add product with id ${createOrder.productId} to order ${createOrder.orderId}. Error: ${err}`);
         }
     }
 
-    private async getProductsForOrder(orderId: number): Promise<ProductAndQuantity[]> {
+    private async getProductsForOrder(orderId: string): Promise<ProductAndQuantity[]> {
         try {
             //@ts-ignore
             const conn = await Client.connect(); 
-            const sql = 'SELECT * FROM products p JOIN order_products op ON p.id = op.productId  WHERE op.orderId=($1)';
+            const sql = 'SELECT * FROM products p JOIN order_products op ON p.id = op."productId"  WHERE op."orderId"=($1)';
             const result = await conn.query(sql, [orderId]);
-            conn.release();
+            conn.release();   
        
-            const orderProducts = result.rows.map((row: { product_id: number; name: string; price: string; category: string; quantity: number }) => {
+            const orderProducts = result.rows.map((row: { productId: number; name: string; price: string; category: string; quantity: number }) => {
                 return{ product: {
-                    id: row.product_id,
+                    id: row.productId,
                     name: row.name,
                     price: row.price,
                     category: row.category
@@ -97,9 +115,11 @@ export class OrderStore {
             }); 
 
             return orderProducts;
+        
+        
         } catch (err) {
             throw new Error(`Could not get products for order ${orderId}`);
-
+            
         }
 
     }
