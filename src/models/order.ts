@@ -15,7 +15,7 @@ export type Order = {
 }
 
 export type CreateOrder = {
-    id?: number,
+    id?: string,
     quantity: string,
     orderId: string,
     productId: string
