@@ -1,8 +1,3 @@
-# API Requirements
-The company stakeholders want to create an online storefront to showcase their great product ideas. Users need to be able to browse an index of all products, see the specifics of a single product, and add products to an order that they can view in a cart page. You have been tasked with building the API that will support this application, and your coworker is building the frontend.
-
-These are the notes from a meeting with the frontend developer that describe what endpoints the API needs to supply, as well as data shapes the frontend and backend have agreed meet the requirements of the application. 
-
 ## API Endpoints
 #### Products
 - Index                                        : 'products' [GET] 
@@ -37,9 +32,9 @@ These are the notes from a meeting with the frontend developer that describe wha
 - lastName
 - password
 
-#### Orders
+#### Order
 - id
-- list of products in the order with its quantity  
+- products: list of products with its quantity  
 - userId
 - status: active or complete
 
@@ -47,24 +42,25 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ### Table users
     id          SERIAL PRIMARY KEY
-    userName    VARCHAR
-    firstName   VARCHAR
-    lastName    VARCHAR
-    password    VARCHAR 
+    userName    VARCHAR NOT NULL
+    firstName   VARCHAR NOT NULL
+    lastName    VARCHAR NOT NULL
+    password    VARCHAR NOT NULL 
 
 ### Table products
     id          SERIAL PRIMARY KEY
-    name        VARCHAR
-    price       NUMERIC
+    name        VARCHAR NOT NULL
+    price       NUMERIC NOT NULL
+    category    VARCHAR NOT NULL
 
 ### Table orders
     id          SERIAL PRIMARY KEY
-    status      VARCHAR
+    status      VARCHAR NOT NULL
     userId      BIGINT foreign key to users table(id)
 
 ### Table order_products
     id          SERIAL PRIMARY KEY
-    quantity    INTEGER
+    quantity    INTEGER NOT NULL
     orderId     BIGINT foreign key to orders table(id)
     productId   BIGINT foreign key to products table(id)
 
