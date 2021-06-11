@@ -4,14 +4,22 @@ import { Product, ProductStore } from '../models/product';
 
 const store = new ProductStore();
 
-const getAllProducts = async (req: Request, res: Response) => {
-    const products = await store.getAllProducts();
-    res.json(products);
+const getAllProducts = async (_req: Request, res: Response) => {
+    try {
+        const products = await store.getAllProducts();
+        res.json(products);
+    } catch(err) {
+        res.status(400).json(err.message);
+    }    
 }
 
 const getProductById = async (req: Request, res: Response) => {
-    const product = await store.getProductById(req.params.id);
-    res.json(product);
+    try {
+        const product = await store.getProductById(req.params.id);
+        res.json(product);
+    } catch(err) {
+        res.status(400).json(err.message);
+    }
 }
 
 const saveProduct = async (req: Request, res: Response) => {    
@@ -35,8 +43,12 @@ const saveProduct = async (req: Request, res: Response) => {
 }
 
 const deleteProduct = async (req: Request, res: Response) => {
-    const product = await store.deleteProduct(req.params.id);
-    res.json(product);
+    try {
+        const product = await store.deleteProduct(req.params.id);
+        res.json(product);
+    } catch (err) {
+        res.status(400).json(err.message);
+    }     
 }
 
 const getProductsByCategory = async (req: Request, res: Response) => {

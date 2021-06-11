@@ -60,7 +60,7 @@ export class ProductStore {
 
             return result.rows[0];
         } catch(err) {
-            throw new Error(`Could not delete product with id ${id}`);
+            throw new Error(`Could not delete product with id ${id}. Error: ${err}`);
         }
     }
 

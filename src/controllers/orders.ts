@@ -5,8 +5,7 @@ import { CreateOrder, Order, OrderStore } from '../models/order';
 const store = new OrderStore();
 
 const createOrder = async (req: Request, res: Response) => {
-    try {
-        
+    try {        
         if(!req.body.userId || !req.body.status) {
                 throw new Error('Body is missing values!');
         } 
@@ -33,8 +32,12 @@ const getCurrentOrderByUser = async (req: Request, res: Response) => {
 }
 
 const getCompletedOrdersByUser = async (req: Request, res: Response) => {
-    const orders = await store.getCompletedOrdersByUser(req.params.id);
-    res.json(orders);
+    try {
+        const orders = await store.getCompletedOrdersByUser(req.params.id);
+        res.json(orders);
+    } catch(err) {
+        res.status(400).json(err.message);
+    }     
 }
 
 const addProduct = async (req: Request, res: Response) => {    
