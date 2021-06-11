@@ -10,6 +10,7 @@ export type Product = {
 
 export class ProductStore {
     async getAllProducts(): Promise<Product[]> {
+        
         try {
             //@ts-ignore
             const conn = await Client.connect();
@@ -20,7 +21,7 @@ export class ProductStore {
             return result.rows;
         } catch(err) {
             throw new Error(`Cannot get products: ${err}`);
-        }        
+        }      
     }
     async getProductById(id: string): Promise<Product> {
         try {

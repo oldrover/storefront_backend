@@ -3,14 +3,14 @@ import { Order, CreateOrder, OrderStore } from '../../models/order';
 const store = new OrderStore();
 
 const mockOrder: Order = {
-    id: '1',
+    id: 1,
     userId: '1', 
     products:[],   
     status: 'active'
 }
 
 const mockCreateOrder: CreateOrder = {
-    id: '1',
+    id: 1,
     quantity: '5',
     orderId: '1',
     productId: '1'

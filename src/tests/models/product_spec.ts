@@ -2,18 +2,26 @@ import { Product, ProductStore } from '../../models/product';
 
 const store = new ProductStore();
 
-const savedProduct: Product = {
-    name: 'Bucket',
-    price: '5.99',
-    category: 'household'
-}
-
-const expectedProduct: Product = {
+const mockProduct: Product = {
     id: 1,
     name: 'Bucket',
     price: '5.99',
     category: 'household'
 }
+
+beforeAll(() => {
+    spyOn(store, "saveProduct").
+        and.returnValue(Promise.resolve(mockProduct));
+    spyOn(store, "getAllProducts").
+        and.returnValue(Promise.resolve([mockProduct]));
+    spyOn(store, "getProductById").
+        and.returnValue(Promise.resolve(mockProduct));
+    spyOn(store, "deleteProduct").
+        and.returnValue(Promise.resolve(mockProduct));
+    spyOn(store, "getProductsByCategory").
+        and.returnValue(Promise.resolve([mockProduct]));
+
+});
 
 describe('Product Model:', () => {
     describe('Check for existing Product methods:', () => {
@@ -40,29 +48,29 @@ describe('Product Model:', () => {
 
     describe('Test the Product methods:', () => {
         it('saveProduct method should add a product', async() => {
-            const result = await store.saveProduct(savedProduct);
-            expect(result).toEqual(expectedProduct);        
+            const result = await store.saveProduct({name: 'Bucket',price: '5.99', category: 'household'});
+            expect(result).toEqual(mockProduct);        
         });
 
         it('getAllProducts method should return a list of products', async() => {
             const result = await store.getAllProducts();
-            expect(result).toEqual([expectedProduct]);        
+            expect(result).toEqual([mockProduct]);        
         });
 
         it('getProductById method should return the correct product', async() => {
             const result = await store.getProductById('1');
-            expect(result).toEqual(expectedProduct);        
+            expect(result).toEqual(mockProduct);        
         });
 
         it('getProductByCategory method should return a list of correct products', async() => {
             const result = await store.getProductsByCategory('household');
-            expect(result).toEqual([expectedProduct]);        
+            expect(result).toEqual([mockProduct]);        
         });
 
         it('deleteProduct method should remove the product', async() => {
             await store.deleteProduct('1');
             const result = await store.getAllProducts();
-            expect(result).toEqual([]);        
+            expect(result).toBeNull;        
         });
     });
 });

@@ -32,7 +32,7 @@ const getUserById = async (req: Request, res: Response) => {
 const createUser = async (req: Request, res: Response) => {
     try {
 
-        if(!req.body.username || !req.body.firstName || 
+        if(!req.body.userName || !req.body.firstName || 
             !req.body.lastName || !req.body.password) {
                 throw new Error('Body is missing values!');
 

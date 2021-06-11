@@ -8,14 +8,14 @@ type ProductAndQuantity = {
 }
 
 export type Order = {
-    id?: string;
+    id?: number;
     products?: ProductAndQuantity[],
     userId: string;
     status: string;
 }
 
 export type CreateOrder = {
-    id?: string,
+    id?: number,
     quantity: string,
     orderId: string,
     productId: string
@@ -66,7 +66,7 @@ export class OrderStore {
 
             const getOrders = async(): Promise<Order[]> => {
                 return Promise.all(result.rows.map( async (row: Order) => {                
-                    const orderId = row.id || "";                
+                    const orderId = String(row.id);                
                     row.products = await this.getProductsForOrder(orderId);                   
                 return (row);                
                 }));
