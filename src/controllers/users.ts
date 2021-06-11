@@ -31,12 +31,18 @@ const getUserById = async (req: Request, res: Response) => {
 
 const createUser = async (req: Request, res: Response) => {
     try {
+
+        if(!req.body.username || !req.body.firstName || 
+            !req.body.lastName || !req.body.password) {
+                throw new Error('Body is missing values!');
+
+        } 
         const user: User = {
             userName: req.body.userName,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             password: req.body.password
-        }
+        }        
     
         const newUser = await store.createUser(user);
         const token = jwt.sign({user: newUser}, TOKEN_SECRET);
