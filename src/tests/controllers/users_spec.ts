@@ -14,9 +14,10 @@ describe('Tests the /users endpoint', () => {
         expect(response.statusCode).toBe(401);
       });
 
-    xit('POST on /users should get Status Code 200', async () => {
+    it('empty POST on /users should get Status Code 400', async () => {
         const response = await request.post('/users');
-        expect(response.statusCode).toBe(200);
+        expect(response.statusCode).toBe(400);
+        expect(response.text).toEqual('"Body is missing values!"');
     });
 
     it('DELETE on /users/1 should get Status Code 401', async () => {
