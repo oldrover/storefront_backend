@@ -26,7 +26,7 @@ If you want to run the tests you should change ENV to test in the `.env` file
 
 ## **Scripts**
 ---
-`yarn watch`  to build and run the project
-`yarn migrate` to create all tables in the databases
-`yarn migratedown` for save deletion of all tables the databases
+`yarn watch`  to build and run the project  
+`yarn migrate` to create all tables in the databases  
+`yarn migratedown` for save deletion of all tables the databases  
 `yarn test` for running the tests
