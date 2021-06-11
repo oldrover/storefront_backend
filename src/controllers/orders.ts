@@ -6,6 +6,11 @@ const store = new OrderStore();
 
 const createOrder = async (req: Request, res: Response) => {
     try {
+        
+        if(!req.body.userId || req.body.status) {
+                throw new Error('Body is missing values!');
+        } 
+
         const order: Order = {
             userId: req.body.userId,
             status: req.body.status
