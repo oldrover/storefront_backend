@@ -9,7 +9,7 @@ dotenv.config();
 //@ts-ignore
 const TOKEN_SECRET: string  = process.env.TOKEN_SECRET;
 
-const store = new UserStore();
+export const store = new UserStore();
 
 const getAllUsers = async (_req: Request, res: Response) => {
     try {

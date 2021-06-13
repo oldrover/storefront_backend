@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import verifyAuthToken from '../security/JWTAuthentication';
 import { CreateOrder, Order, OrderStore } from '../models/order';
 
-const store = new OrderStore();
+export const store = new OrderStore();
 
 const createOrder = async (req: Request, res: Response) => {
     try {        

@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import verifyAuthToken from '../security/JWTAuthentication';
 import { Product, ProductStore } from '../models/product';
 
-const store = new ProductStore();
+export const store = new ProductStore();
 
 const getAllProducts = async (_req: Request, res: Response) => {
     try {
@@ -52,8 +52,12 @@ const deleteProduct = async (req: Request, res: Response) => {
 }
 
 const getProductsByCategory = async (req: Request, res: Response) => {
-    const products = await store.getProductsByCategory(req.params.category);
-    res.json(products);
+    try {
+        const products = await store.getProductsByCategory(req.params.category);
+        res.json(products);
+    } catch (err) {
+    res.status(400).json(err.message);
+    }
 }
 
 const product_routes = (app: express.Application) => {
