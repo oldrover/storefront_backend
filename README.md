@@ -13,6 +13,10 @@ Your application needs to be ready for beta tests, so it needs to have tests, ke
 ---
 Please have a look at the `REQUIREMENTS.md`
 
+## **Ports**
+- Database Port: 5432
+- Backend Port : 3000 
+
 ## **Setup the Postgres Databases** 
 ---
 You can either use the included `createdb.sh` or create the databases and user yourself:
